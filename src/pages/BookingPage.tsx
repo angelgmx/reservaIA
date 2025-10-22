@@ -11,6 +11,7 @@ import { UtensilsCrossed, ArrowLeft, Calendar as CalendarIcon, Users } from "luc
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import RestaurantChatbot from "@/components/RestaurantChatbot";
 
 interface Restaurant {
   id: string;
@@ -268,6 +269,7 @@ const BookingPage = () => {
           </Card>
         </div>
       </div>
+      <RestaurantChatbot restaurantId={restaurant.id} />
     </div>
   );
 };

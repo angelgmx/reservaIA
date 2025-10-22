@@ -14,6 +14,53 @@ export type Database = {
   }
   public: {
     Tables: {
+      menu_items: {
+        Row: {
+          category: string
+          created_at: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          is_available: boolean | null
+          name: string
+          price: number
+          restaurant_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_available?: boolean | null
+          name: string
+          price: number
+          restaurant_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_available?: boolean | null
+          name?: string
+          price?: number
+          restaurant_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menu_items_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -119,6 +166,7 @@ export type Database = {
       }
       restaurants: {
         Row: {
+          additional_info: string | null
           address: string
           booking_link: string | null
           city: string
@@ -126,9 +174,11 @@ export type Database = {
           cuisine_type: string | null
           description: string | null
           email: string | null
+          faq_info: string | null
           id: string
           image_url: string | null
           is_active: boolean | null
+          menu_description: string | null
           name: string
           opening_hours: Json | null
           owner_id: string
@@ -137,6 +187,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          additional_info?: string | null
           address: string
           booking_link?: string | null
           city: string
@@ -144,9 +195,11 @@ export type Database = {
           cuisine_type?: string | null
           description?: string | null
           email?: string | null
+          faq_info?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean | null
+          menu_description?: string | null
           name: string
           opening_hours?: Json | null
           owner_id: string
@@ -155,6 +208,7 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          additional_info?: string | null
           address?: string
           booking_link?: string | null
           city?: string
@@ -162,9 +216,11 @@ export type Database = {
           cuisine_type?: string | null
           description?: string | null
           email?: string | null
+          faq_info?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean | null
+          menu_description?: string | null
           name?: string
           opening_hours?: Json | null
           owner_id?: string
@@ -251,6 +307,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_table_availability: {
+        Args: {
+          p_date: string
+          p_guests: number
+          p_restaurant_id: string
+          p_time: string
+        }
+        Returns: {
+          capacity: number
+          table_id: string
+          table_number: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

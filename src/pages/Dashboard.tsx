@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LogOut, Copy, Calendar, Users } from "lucide-react";
+import { LogOut, Copy, Calendar, Users, Settings } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -141,7 +141,7 @@ const Dashboard = () => {
                   Comparte este enlace con tus clientes para que puedan hacer reservas
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -154,6 +154,12 @@ const Dashboard = () => {
                     Copiar
                   </Button>
                 </div>
+                <Link to="/menu-management">
+                  <Button variant="secondary" className="w-full">
+                    <Settings className="h-4 w-4 mr-2" />
+                    Gestionar Menú y Chatbot
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
 

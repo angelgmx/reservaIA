@@ -1,1 +1,4 @@
 project_id = "xeyxzvyaiaihausyggui"
+
+[functions.restaurant-chatbot]
+verify_jwt = false
