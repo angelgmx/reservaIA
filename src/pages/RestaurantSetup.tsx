@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { UtensilsCrossed } from "lucide-react";
+import { UtensilsCrossed, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 
 const RestaurantSetup = () => {
@@ -24,7 +24,30 @@ const RestaurantSetup = () => {
     email: "",
     cuisineType: "",
     priceRange: "$$",
+    logoUrl: "",
+    primaryColor: "#8B5CF6",
+    secondaryColor: "#EC4899",
+    maxCapacity: "",
+    galleryPhotos: [] as string[],
   });
+  const [newPhotoUrl, setNewPhotoUrl] = useState("");
+
+  const addGalleryPhoto = () => {
+    if (newPhotoUrl.trim()) {
+      setFormData(prev => ({
+        ...prev,
+        galleryPhotos: [...prev.galleryPhotos, newPhotoUrl.trim()]
+      }));
+      setNewPhotoUrl("");
+    }
+  };
+
+  const removeGalleryPhoto = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      galleryPhotos: prev.galleryPhotos.filter((_, i) => i !== index)
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,6 +81,13 @@ const RestaurantSetup = () => {
       email: formData.email,
       cuisine_type: formData.cuisineType,
       price_range: formData.priceRange,
+      logo_url: formData.logoUrl || null,
+      theme_colors: {
+        primary: formData.primaryColor,
+        secondary: formData.secondaryColor
+      },
+      max_capacity: formData.maxCapacity ? parseInt(formData.maxCapacity) : null,
+      gallery_photos: formData.galleryPhotos,
       is_active: true,
     });
 
@@ -187,6 +217,115 @@ const RestaurantSetup = () => {
                     <option value="$$$$">$$$$ - Muy Caro</option>
                   </select>
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="logoUrl">URL del Logo (opcional)</Label>
+                <Input
+                  id="logoUrl"
+                  type="url"
+                  value={formData.logoUrl}
+                  onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })}
+                  placeholder="https://ejemplo.com/logo.png"
+                />
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="primaryColor">Color Principal del Tema</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="primaryColor"
+                      type="color"
+                      value={formData.primaryColor}
+                      onChange={(e) => setFormData({ ...formData, primaryColor: e.target.value })}
+                      className="w-20 h-10"
+                    />
+                    <Input
+                      type="text"
+                      value={formData.primaryColor}
+                      onChange={(e) => setFormData({ ...formData, primaryColor: e.target.value })}
+                      placeholder="#8B5CF6"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="secondaryColor">Color Secundario</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="secondaryColor"
+                      type="color"
+                      value={formData.secondaryColor}
+                      onChange={(e) => setFormData({ ...formData, secondaryColor: e.target.value })}
+                      className="w-20 h-10"
+                    />
+                    <Input
+                      type="text"
+                      value={formData.secondaryColor}
+                      onChange={(e) => setFormData({ ...formData, secondaryColor: e.target.value })}
+                      placeholder="#EC4899"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="maxCapacity">Aforo Máximo (opcional)</Label>
+                <Input
+                  id="maxCapacity"
+                  type="number"
+                  min="1"
+                  value={formData.maxCapacity}
+                  onChange={(e) => setFormData({ ...formData, maxCapacity: e.target.value })}
+                  placeholder="Ejemplo: 100 personas"
+                />
+                <p className="text-sm text-muted-foreground">
+                  Número máximo de personas que puede acoger el restaurante simultáneamente
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Galería de Fotos (opcional)</Label>
+                <div className="flex gap-2">
+                  <Input
+                    type="url"
+                    value={newPhotoUrl}
+                    onChange={(e) => setNewPhotoUrl(e.target.value)}
+                    placeholder="https://ejemplo.com/foto.jpg"
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addGalleryPhoto();
+                      }
+                    }}
+                  />
+                  <Button type="button" onClick={addGalleryPhoto} variant="outline" size="icon">
+                    <Upload className="h-4 w-4" />
+                  </Button>
+                </div>
+                {formData.galleryPhotos.length > 0 && (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
+                    {formData.galleryPhotos.map((photo, idx) => (
+                      <div key={idx} className="relative group">
+                        <img
+                          src={photo}
+                          alt={`Foto ${idx + 1}`}
+                          className="h-24 w-full object-cover rounded-lg"
+                        />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="icon"
+                          className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => removeGalleryPhoto(idx)}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <Button

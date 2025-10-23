@@ -175,15 +175,19 @@ export type Database = {
           description: string | null
           email: string | null
           faq_info: string | null
+          gallery_photos: string[] | null
           id: string
           image_url: string | null
           is_active: boolean | null
+          logo_url: string | null
+          max_capacity: number | null
           menu_description: string | null
           name: string
           opening_hours: Json | null
           owner_id: string
           phone: string
           price_range: string | null
+          theme_colors: Json | null
           updated_at: string | null
         }
         Insert: {
@@ -196,15 +200,19 @@ export type Database = {
           description?: string | null
           email?: string | null
           faq_info?: string | null
+          gallery_photos?: string[] | null
           id?: string
           image_url?: string | null
           is_active?: boolean | null
+          logo_url?: string | null
+          max_capacity?: number | null
           menu_description?: string | null
           name: string
           opening_hours?: Json | null
           owner_id: string
           phone: string
           price_range?: string | null
+          theme_colors?: Json | null
           updated_at?: string | null
         }
         Update: {
@@ -217,15 +225,19 @@ export type Database = {
           description?: string | null
           email?: string | null
           faq_info?: string | null
+          gallery_photos?: string[] | null
           id?: string
           image_url?: string | null
           is_active?: boolean | null
+          logo_url?: string | null
+          max_capacity?: number | null
           menu_description?: string | null
           name?: string
           opening_hours?: Json | null
           owner_id?: string
           phone?: string
           price_range?: string | null
+          theme_colors?: Json | null
           updated_at?: string | null
         }
         Relationships: [
@@ -234,6 +246,60 @@ export type Database = {
             columns: ["owner_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          comment: string | null
+          created_at: string | null
+          customer_email: string
+          customer_name: string
+          id: string
+          photos: string[] | null
+          rating: number
+          reservation_id: string | null
+          restaurant_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string | null
+          customer_email: string
+          customer_name: string
+          id?: string
+          photos?: string[] | null
+          rating: number
+          reservation_id?: string | null
+          restaurant_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string | null
+          customer_email?: string
+          customer_name?: string
+          id?: string
+          photos?: string[] | null
+          rating?: number
+          reservation_id?: string | null
+          restaurant_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
             referencedColumns: ["id"]
           },
         ]
@@ -307,6 +373,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_restaurant_capacity: {
+        Args: {
+          p_date: string
+          p_guests: number
+          p_restaurant_id: string
+          p_time: string
+        }
+        Returns: boolean
+      }
       check_table_availability: {
         Args: {
           p_date: string
