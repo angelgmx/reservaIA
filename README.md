@@ -1,72 +1,44 @@
-# Welcome to your Lovable project
+# 💼 Proyecto Web — Desarrollo con React, TypeScript y Tailwind
 
-## Project info
+## 🧩 Descripción general
 
-**URL**: https://lovable.dev/projects/d9abe2ec-0a71-419e-83e9-927a5f8f9b08
+Este proyecto ha sido desarrollado con un enfoque en la **eficiencia, escalabilidad y buenas prácticas de desarrollo frontend**.  
+La aplicación utiliza una arquitectura moderna basada en **React + TypeScript**, acompañada de **Vite** para un entorno de desarrollo rápido y optimizado.
 
-## How can I edit this code?
+Además, se ha aplicado un diseño limpio y minimalista con **Tailwind CSS** y componentes de **shadcn/ui**, logrando una interfaz profesional y coherente.
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## ⚙️ Tecnologías utilizadas
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/d9abe2ec-0a71-419e-83e9-927a5f8f9b08) and start prompting.
+- ⚡ **Vite** — Entorno de desarrollo rápido y moderno  
+- ⚛️ **React** — Librería principal para la construcción de interfaces  
+- 🧠 **TypeScript** — Tipado estático para un código más seguro y mantenible  
+- 🎨 **Tailwind CSS** — Estilos utilitarios para un diseño flexible y elegante  
+- 🧩 **shadcn/ui** — Librería de componentes accesibles y personalizables  
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## 🛠️ Configuración y ejecución del proyecto
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Para ejecutar el proyecto de forma local, asegúrate de tener **Node.js** y **npm** instalados en tu equipo.  
+Puedes instalar Node.js fácilmente usando [nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Sigue estos pasos:
 
-Follow these steps:
+```bash
+# 1️⃣ Clona el repositorio
+git clone <URL_DEL_REPOSITORIO>
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# 2️⃣ Accede al directorio del proyecto
+cd <NOMBRE_DEL_PROYECTO>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# 3️⃣ Instala las dependencias necesarias
+npm install
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 4️⃣ Inicia el servidor de desarrollo con recarga automática
 npm run dev
-```
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/d9abe2ec-0a71-419e-83e9-927a5f8f9b08) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
 
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
