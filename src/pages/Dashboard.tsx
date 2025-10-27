@@ -5,9 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { LogOut, Copy, Calendar, Users, Settings, Upload, X, Image as ImageIcon, Phone } from "lucide-react";
+import { LogOut, Copy, Calendar, Users, Settings, Phone, Palette } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -16,8 +14,6 @@ interface Restaurant {
   id: string;
   name: string;
   address: string;
-  logo_url?: string;
-  gallery_photos?: string[];
 }
 
 interface Reservation {
@@ -38,8 +34,6 @@ const Dashboard = () => {
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loadingData, setLoadingData] = useState(true);
-  const [logoUrl, setLogoUrl] = useState("");
-  const [newPhotoUrl, setNewPhotoUrl] = useState("");
   const [isPhoneAssistantOpen, setIsPhoneAssistantOpen] = useState(false);
 
   useEffect(() => {
@@ -93,62 +87,6 @@ const Dashboard = () => {
     const link = `${window.location.origin}/booking/${restaurant.id}`;
     navigator.clipboard.writeText(link);
     toast.success("¡Enlace copiado al portapapeles!");
-  };
-
-  const updateLogo = async () => {
-    if (!restaurant || !logoUrl.trim()) return;
-
-    const { error } = await supabase
-      .from('restaurants')
-      .update({ logo_url: logoUrl })
-      .eq('id', restaurant.id);
-
-    if (error) {
-      toast.error("Error al actualizar el logo");
-    } else {
-      toast.success("Logo actualizado correctamente");
-      setRestaurant({ ...restaurant, logo_url: logoUrl });
-      setLogoUrl("");
-    }
-  };
-
-  const addGalleryPhoto = async () => {
-    if (!restaurant || !newPhotoUrl.trim()) return;
-
-    const currentPhotos = restaurant.gallery_photos || [];
-    const updatedPhotos = [...currentPhotos, newPhotoUrl.trim()];
-
-    const { error } = await supabase
-      .from('restaurants')
-      .update({ gallery_photos: updatedPhotos })
-      .eq('id', restaurant.id);
-
-    if (error) {
-      toast.error("Error al añadir la foto");
-    } else {
-      toast.success("Foto añadida correctamente");
-      setRestaurant({ ...restaurant, gallery_photos: updatedPhotos });
-      setNewPhotoUrl("");
-    }
-  };
-
-  const removeGalleryPhoto = async (index: number) => {
-    if (!restaurant) return;
-
-    const currentPhotos = restaurant.gallery_photos || [];
-    const updatedPhotos = currentPhotos.filter((_, i) => i !== index);
-
-    const { error } = await supabase
-      .from('restaurants')
-      .update({ gallery_photos: updatedPhotos })
-      .eq('id', restaurant.id);
-
-    if (error) {
-      toast.error("Error al eliminar la foto");
-    } else {
-      toast.success("Foto eliminada correctamente");
-      setRestaurant({ ...restaurant, gallery_photos: updatedPhotos });
-    }
   };
 
   if (loading || loadingData) {
@@ -218,18 +156,24 @@ const Dashboard = () => {
                     Copiar
                   </Button>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                   <Link to="/menu-management">
                     <Button variant="secondary" className="w-full">
                       <Settings className="h-4 w-4 mr-2" />
-                      Gestionar Menú y Chatbot
+                      Menú y Chatbot
+                    </Button>
+                  </Link>
+                  <Link to="/restaurant-settings">
+                    <Button variant="secondary" className="w-full">
+                      <Palette className="h-4 w-4 mr-2" />
+                      Configuración
                     </Button>
                   </Link>
                   <Dialog open={isPhoneAssistantOpen} onOpenChange={setIsPhoneAssistantOpen}>
                     <DialogTrigger asChild>
                       <Button variant="secondary" className="w-full">
                         <Phone className="h-4 w-4 mr-2" />
-                        Asistente Telefónico IA
+                        Asistente IA
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
@@ -266,96 +210,6 @@ const Dashboard = () => {
                 </div>
               </CardContent>
             </Card>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <ImageIcon className="h-5 w-5" />
-                    Logo del Restaurante
-                  </CardTitle>
-                  <CardDescription>
-                    Sube o actualiza el logo de tu restaurante
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {restaurant.logo_url && (
-                    <div className="flex justify-center">
-                      <img
-                        src={restaurant.logo_url}
-                        alt="Logo del restaurante"
-                        className="h-32 w-32 object-contain rounded-lg border shadow-card"
-                      />
-                    </div>
-                  )}
-                  <div className="flex gap-2">
-                    <Input
-                      type="url"
-                      placeholder="https://ejemplo.com/logo.png"
-                      value={logoUrl}
-                      onChange={(e) => setLogoUrl(e.target.value)}
-                    />
-                    <Button onClick={updateLogo} disabled={!logoUrl.trim()}>
-                      <Upload className="h-4 w-4 mr-2" />
-                      Subir
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <ImageIcon className="h-5 w-5" />
-                    Galería de Fotos
-                  </CardTitle>
-                  <CardDescription>
-                    Añade fotos de tu restaurante
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex gap-2">
-                    <Input
-                      type="url"
-                      placeholder="https://ejemplo.com/foto.jpg"
-                      value={newPhotoUrl}
-                      onChange={(e) => setNewPhotoUrl(e.target.value)}
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          addGalleryPhoto();
-                        }
-                      }}
-                    />
-                    <Button onClick={addGalleryPhoto} disabled={!newPhotoUrl.trim()} size="icon">
-                      <Upload className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  {restaurant.gallery_photos && restaurant.gallery_photos.length > 0 && (
-                    <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto">
-                      {restaurant.gallery_photos.map((photo, idx) => (
-                        <div key={idx} className="relative group">
-                          <img
-                            src={photo}
-                            alt={`Foto ${idx + 1}`}
-                            className="h-24 w-full object-cover rounded-lg border"
-                          />
-                          <Button
-                            type="button"
-                            variant="destructive"
-                            size="icon"
-                            className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-smooth"
-                            onClick={() => removeGalleryPhoto(idx)}
-                          >
-                            <X className="h-3 w-3" />
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
 
             <Card>
               <CardHeader>
